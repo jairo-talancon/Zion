@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Zion</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- PAGE 1: RIDDLE -->
+  <section id="riddleScreen" class="screen active">
+    <canvas id="matrixCanvas"></canvas>
+    <div class="center-panel">
+      <div id="riddleText" class="riddle-text">
+        She was running late,<br />
+        with no time to stay,<br /><br />
+        yet something small<br />
+        pulled her away.<br /><br />
+        She followed…<br />
+        and found a world unknown.<br /><br />
+        What did she follow?
+      </div>
+
+      <div class="prompt-row">
+        <span>&gt;</span>
+        <input id="riddleInput" type="text" autocomplete="off" />
+      </div>
+
+      <div id="riddleFeedback" class="feedback"></div>
+    </div>
+  </section>
+
+  <!-- PAGE 2: PILLS -->
+  <section id="pillScreen" class="screen hidden">
+    <div id="rabbitFlash" class="rabbit-flash hidden">🐇</div>
+
+    <div class="pill-stage">
+      <div class="pill-row">
+        <div id="redPill" class="pill red-pill" tabindex="0" aria-label="Red pill"></div>
+        <div id="bluePill" class="pill blue-pill" tabindex="0" aria-label="Blue pill"></div>
+      </div>
+      <div id="pillHint" class="pill-hint"></div>
+    </div>
+  </section>
+
+  <!-- PAGE 3: LOGIN -->
+  <section id="authScreen" class="screen hidden">
+    <div class="center-panel auth-panel">
+      <div class="auth-title">Zion Access</div>
+      <input id="usernameInput" type="text" placeholder="Username" autocomplete="username" />
+      <input id="passwordInput" type="password" placeholder="Password" autocomplete="current-password" />
+      <div class="auth-buttons">
+        <button id="registerBtn" type="button">Register</button>
+        <button id="loginBtn" type="button">Login</button>
+      </div>
+      <div id="authStatus" class="feedback"></div>
+    </div>
+  </section>
+
+  <!-- PAGE 4: CHAT -->
+  <section id="chatScreen" class="screen hidden">
+    <div class="terminal-shell">
+      <div id="terminalLog" class="terminal-log"></div>
+      <div id="typingIndicator" class="typing-indicator"></div>
+
+      <div class="terminal-input-row">
+        <span>&gt;</span>
+        <input id="chatInput" type="text" autocomplete="off" />
+      </div>
+
+      <input id="fileInput" type="file" class="hidden" accept="image/*,video/*" />
+    </div>
+  </section>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
