@@ -352,14 +352,6 @@ fileInput.addEventListener("change", () => {
   reader.readAsDataURL(file);
 });
 
-  reader.onerror = () => {
-    addSystemLine("Upload failed. File rejected.");
-    fileInput.value = "";
-  };
-
-  reader.readAsDataURL(file);
-});
-
 socket.on("chat_message", ({ username, text }) => {
   addLine(`${username}: ${text}`);
 });
