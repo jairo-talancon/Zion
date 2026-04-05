@@ -330,26 +330,84 @@ fileInput.addEventListener("change", () => {
   const file = fileInput.files[0];
   if (!file) return;
 
-  const reader = new FileReader();
-
   addSystemLine("Uploading...");
-  
-  reader.onload = function () {
-    socket.emit("upload_media", {
-      username: currentUsername,
-      name: file.name,
-      mimeType: file.type,
-      dataUrl: reader.result
-    });
+  addSystemLine("Processing file...");
 
-    addSystemLine("File injected into system.");
-  };
+  // Images: resize before sending
+  if (file.type.startsWith("image/")) {
+    const reader = new FileReader();
 
-  reader.onerror = function () {
-    addSystemLine("Upload failed.");
-  };
+    reader.onload = () => {
+      const img = new Image();
 
-  reader.readAsDataURL(file);
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        const maxWidth = 1280;
+        const scale = Math.min(1, maxWidth / img.width);
+
+        canvas.width = Math.floor(img.width * scale);
+        canvas.height = Math.floor(img.height * scale);
+
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+        const dataUrl = canvas.toDataURL("image/jpeg", 0.8);
+
+        socket.emit("upload_media", {
+          username: currentUsername,
+          name: file.name,
+          mimeType: "image/jpeg",
+          dataUrl
+        });
+
+        addSystemLine("File injected into system.");
+        fileInput.value = "";
+      };
+
+      img.onerror = () => {
+        addSystemLine("Upload failed. File rejected.");
+        fileInput.value = "";
+      };
+
+      img.src = reader.result;
+    };
+
+    reader.onerror = () => {
+      addSystemLine("Upload failed. File rejected.");
+      fileInput.value = "";
+    };
+
+    reader.readAsDataURL(file);
+    return;
+  }
+
+  // Videos: send as-is
+  if (file.type.startsWith("video/")) {
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      socket.emit("upload_media", {
+        username: currentUsername,
+        name: file.name,
+        mimeType: file.type,
+        dataUrl: reader.result
+      });
+
+      addSystemLine("File injected into system.");
+      fileInput.value = "";
+    };
+
+    reader.onerror = () => {
+      addSystemLine("Upload failed. File rejected.");
+      fileInput.value = "";
+    };
+
+    reader.readAsDataURL(file);
+    return;
+  }
+
+  addSystemLine("Upload failed. File rejected.");
+  fileInput.value = "";
 });
 
 socket.on("chat_message", ({ username, text }) => {
@@ -381,16 +439,22 @@ socket.on("whisper_sent", ({ to, text }) => {
   addSystemLine(`(you → ${to}): ${text}`);
 });
 
-socket.on("media_message", ({ username, mimeType, dataUrl, name }) => {
+socket.on("media_message", ({ username, name, mimeType, dataUrl }) => {
   addSystemLine(`${username}:`);
 
+  const mediaWrap = document.createElement("div");
+  mediaWrap.className = "terminal-line media-block";
+
   if (mimeType.startsWith("image/")) {
-    addHtml(`<img src="${dataUrl}" alt="${name}">`);
+    mediaWrap.innerHTML = `<img src="${dataUrl}" alt="${name}">`;
   } else if (mimeType.startsWith("video/")) {
-    addHtml(`<video src="${dataUrl}" controls></video>`);
+    mediaWrap.innerHTML = `<video src="${dataUrl}" controls></video>`;
   } else {
-    addSystemLine(`[FILE] ${name}`);
+    mediaWrap.textContent = `[FILE] ${name}`;
   }
+
+  terminalLog.appendChild(mediaWrap);
+  terminalLog.scrollTop = terminalLog.scrollHeight;
 });
 
 socket.on("glitch", () => {
