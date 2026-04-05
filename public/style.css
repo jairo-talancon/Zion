@@ -311,3 +311,14 @@ button:hover {
   height: auto;
   border: 1px solid #0bb14b;
 }
+
+html, body {
+  height: 100%;
+  overflow: hidden;
+}
+
+@supports (-webkit-touch-callout: none) {
+  .terminal-shell {
+    height: -webkit-fill-available;
+  }
+}

@@ -26,19 +26,32 @@ const authStatus = document.getElementById("authStatus");
 const terminalLog = document.getElementById("terminalLog");
 const typingIndicator = document.getElementById("typingIndicator");
 const chatInput = document.getElementById("chatInput");
-const fileInput = document.getElementById("fileInput");
+// iPhone keyboard fix
+function adjustForKeyboard() {
+  const vh = window.innerHeight;
+  document.querySelector(".terminal-shell").style.height = vh + "px";
+}
 
+window.addEventListener("resize", adjustForKeyboard);
+window.addEventListener("focusin", adjustForKeyboard);
+window.addEventListener("focusout", adjustForKeyboard);
+
+// keep input visible
 chatInput.addEventListener("focus", () => {
   setTimeout(() => {
     chatInput.scrollIntoView({ behavior: "smooth", block: "center" });
   }, 300);
 });
 
+
 const mobileUploadBtn = document.getElementById("mobileUploadBtn");
 
-mobileUploadBtn.addEventListener("click", () => {
+mobileUploadBtn.addEventListener("click", (e) => {
+  e.preventDefault();
   fileInput.click();
 });
+
+const fileInput = document.getElementById("fileInput");
 
 const canvas = document.getElementById("matrixCanvas");
 const ctx = canvas.getContext("2d");
@@ -317,12 +330,11 @@ fileInput.addEventListener("change", () => {
   const file = fileInput.files[0];
   if (!file) return;
 
-  addSystemLine("Uploading...");
-  addSystemLine("Processing file...");
-
   const reader = new FileReader();
 
-  reader.onload = () => {
+  addSystemLine("Uploading...");
+  
+  reader.onload = function () {
     socket.emit("upload_media", {
       username: currentUsername,
       name: file.name,
@@ -331,8 +343,14 @@ fileInput.addEventListener("change", () => {
     });
 
     addSystemLine("File injected into system.");
-    fileInput.value = "";
   };
+
+  reader.onerror = function () {
+    addSystemLine("Upload failed.");
+  };
+
+  reader.readAsDataURL(file);
+});
 
   reader.onerror = () => {
     addSystemLine("Upload failed. File rejected.");
