@@ -7,8 +7,21 @@
   },
   "dependencies": {
     "bcrypt": "^5.1.1",
-    "express": "^4.19.2",
-    "mongoose": "^8.6.1",
-    "socket.io": "^4.8.0"
-  }
+    "express": "^4.22.1",
+    "mongoose": "^8.23.0",
+    "socket.io": "^4.8.3"
+  },
+  "description": "",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jairo-talancon/Zion.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/jairo-talancon/Zion/issues"
+  },
+  "homepage": "https://github.com/jairo-talancon/Zion#readme"
 }

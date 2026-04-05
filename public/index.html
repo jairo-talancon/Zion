@@ -7,7 +7,6 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <!-- PAGE 1: RIDDLE -->
   <section id="riddleScreen" class="screen active">
     <canvas id="matrixCanvas"></canvas>
     <div class="center-panel">
@@ -30,20 +29,18 @@
     </div>
   </section>
 
-  <!-- PAGE 2: PILLS -->
   <section id="pillScreen" class="screen hidden">
     <div id="rabbitFlash" class="rabbit-flash hidden">🐇</div>
 
     <div class="pill-stage">
       <div class="pill-row">
-        <div id="redPill" class="pill red-pill" tabindex="0" aria-label="Red pill"></div>
-        <div id="bluePill" class="pill blue-pill" tabindex="0" aria-label="Blue pill"></div>
+        <div id="redPill" class="pill red-pill" tabindex="0"></div>
+        <div id="bluePill" class="pill blue-pill" tabindex="0"></div>
       </div>
       <div id="pillHint" class="pill-hint"></div>
     </div>
   </section>
 
-  <!-- PAGE 3: LOGIN -->
   <section id="authScreen" class="screen hidden">
     <div class="center-panel auth-panel">
       <div class="auth-title">Zion Access</div>
@@ -57,7 +54,6 @@
     </div>
   </section>
 
-  <!-- PAGE 4: CHAT -->
   <section id="chatScreen" class="screen hidden">
     <div class="terminal-shell">
       <div id="terminalLog" class="terminal-log"></div>

@@ -4,36 +4,30 @@ let currentUsername = "";
 let lastSentMessage = "";
 let typingTimeout = null;
 
-// screens
 const riddleScreen = document.getElementById("riddleScreen");
 const pillScreen = document.getElementById("pillScreen");
 const authScreen = document.getElementById("authScreen");
 const chatScreen = document.getElementById("chatScreen");
 
-// riddle
 const riddleInput = document.getElementById("riddleInput");
 const riddleFeedback = document.getElementById("riddleFeedback");
 
-// pills
 const rabbitFlash = document.getElementById("rabbitFlash");
 const redPill = document.getElementById("redPill");
 const bluePill = document.getElementById("bluePill");
 const pillHint = document.getElementById("pillHint");
 
-// auth
 const usernameInput = document.getElementById("usernameInput");
 const passwordInput = document.getElementById("passwordInput");
 const registerBtn = document.getElementById("registerBtn");
 const loginBtn = document.getElementById("loginBtn");
 const authStatus = document.getElementById("authStatus");
 
-// chat
 const terminalLog = document.getElementById("terminalLog");
 const typingIndicator = document.getElementById("typingIndicator");
 const chatInput = document.getElementById("chatInput");
 const fileInput = document.getElementById("fileInput");
 
-// matrix on first page only
 const canvas = document.getElementById("matrixCanvas");
 const ctx = canvas.getContext("2d");
 
@@ -44,7 +38,7 @@ function resizeCanvas() {
 resizeCanvas();
 window.addEventListener("resize", resizeCanvas);
 
-const matrixChars = "0ア1イ2ウ3エ4オ5カ6キ7ク8ケ9コAサBシCスDセEソFタGチHツIテJトKナLニMヌNネOノPハQヒRフSヘTホUマVミWムXメYモZヤユヨラリルレロワヲン";
+const matrixChars = "01ア2イ3ウ4エ5オ6カ7キ8ク9ケコサシスセソ";
 const fontSize = 16;
 let drops = [];
 
@@ -80,7 +74,6 @@ function stopMatrix() {
   canvas.style.display = "none";
 }
 
-// keep riddle focused
 document.addEventListener("keydown", () => {
   if (!riddleScreen.classList.contains("hidden")) {
     riddleInput.focus();
@@ -106,7 +99,6 @@ riddleInput.addEventListener("input", () => {
   }
 });
 
-// pill hints
 redPill.addEventListener("mouseenter", () => {
   pillHint.textContent = "Reality bends.";
 });
@@ -130,7 +122,6 @@ bluePill.addEventListener("click", () => {
   pillHint.textContent = "You stay in the illusion...";
 });
 
-// auth
 registerBtn.addEventListener("click", async () => {
   authStatus.textContent = "Registering...";
   try {
@@ -149,7 +140,7 @@ registerBtn.addEventListener("click", async () => {
     } else {
       authStatus.textContent = data?.message || "Register failed.";
     }
-  } catch (err) {
+  } catch {
     authStatus.textContent = "Register failed.";
   }
 });
@@ -181,12 +172,11 @@ loginBtn.addEventListener("click", async () => {
     } else {
       authStatus.textContent = data?.message || "Login failed.";
     }
-  } catch (err) {
+  } catch {
     authStatus.textContent = "Login failed.";
   }
 });
 
-// terminal helpers
 function addLine(text, className = "terminal-user") {
   const line = document.createElement("div");
   line.className = `terminal-line ${className}`;
@@ -212,7 +202,6 @@ function runGlitch() {
   setTimeout(() => document.body.classList.remove("glitch"), 220);
 }
 
-// commands and chat
 function sendChat() {
   const raw = chatInput.value.trim();
   if (!raw) return;
@@ -289,9 +278,7 @@ function handleCommand(command) {
 
     case "/exit":
       addSystemLine("You were never here.");
-      setTimeout(() => {
-        addSystemLine("Disconnecting...");
-      }, 400);
+      setTimeout(() => addSystemLine("Disconnecting..."), 400);
       setTimeout(() => {
         addSystemLine("Connection lost.");
         location.reload();
@@ -301,12 +288,10 @@ function handleCommand(command) {
     case "/whisper": {
       const to = rest[0];
       const text = rest.slice(1).join(" ").trim();
-
       if (!to || !text) {
         addSystemLine("Usage: /whisper username message");
         return;
       }
-
       socket.emit("whisper", { from: currentUsername, to, text });
       break;
     }
@@ -316,7 +301,6 @@ function handleCommand(command) {
   }
 }
 
-// uploads
 fileInput.addEventListener("change", () => {
   const file = fileInput.files[0];
   if (!file) return;
@@ -339,7 +323,6 @@ fileInput.addEventListener("change", () => {
   reader.readAsDataURL(file);
 });
 
-// socket events
 socket.on("chat_message", ({ username, text }) => {
   addLine(`${username}: ${text}`);
 });

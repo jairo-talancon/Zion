@@ -3,8 +3,6 @@
   --green-dim: #0bb14b;
   --bg: #000000;
   --text: #d6ffd6;
-  --red: #d61f1f;
-  --blue: #1f6ed6;
 }
 
 * {
@@ -38,7 +36,6 @@ body {
   display: block;
 }
 
-/* PAGE 1 */
 #matrixCanvas {
   position: absolute;
   inset: 0;
@@ -109,7 +106,6 @@ button:hover {
   box-shadow: 0 0 12px rgba(0, 255, 102, 0.25);
 }
 
-/* PAGE 2 */
 .pill-stage {
   position: absolute;
   inset: 0;
@@ -173,7 +169,6 @@ button:hover {
   100% { opacity: 0; transform: scale(1.06); }
 }
 
-/* PAGE 3 */
 .auth-panel {
   width: min(90vw, 360px);
 }
@@ -194,7 +189,6 @@ button:hover {
   gap: 12px;
 }
 
-/* PAGE 4 */
 .terminal-shell {
   position: absolute;
   top: 12px;
