@@ -28,6 +28,18 @@ const typingIndicator = document.getElementById("typingIndicator");
 const chatInput = document.getElementById("chatInput");
 const fileInput = document.getElementById("fileInput");
 
+chatInput.addEventListener("focus", () => {
+  setTimeout(() => {
+    chatInput.scrollIntoView({ behavior: "smooth", block: "center" });
+  }, 300);
+});
+
+const mobileUploadBtn = document.getElementById("mobileUploadBtn");
+
+mobileUploadBtn.addEventListener("click", () => {
+  fileInput.click();
+});
+
 const canvas = document.getElementById("matrixCanvas");
 const ctx = canvas.getContext("2d");
 
@@ -309,6 +321,7 @@ fileInput.addEventListener("change", () => {
   addSystemLine("Processing file...");
 
   const reader = new FileReader();
+
   reader.onload = () => {
     socket.emit("upload_media", {
       username: currentUsername,
@@ -316,7 +329,13 @@ fileInput.addEventListener("change", () => {
       mimeType: file.type,
       dataUrl: reader.result
     });
+
     addSystemLine("File injected into system.");
+    fileInput.value = "";
+  };
+
+  reader.onerror = () => {
+    addSystemLine("Upload failed. File rejected.");
     fileInput.value = "";
   };
 
