@@ -322,3 +322,11 @@ html, body {
     height: -webkit-fill-available;
   }
 }
+
+.pill {
+  transition: transform 0.2s ease;
+}
+
+.pill:active {
+  transform: scale(0.95);
+}

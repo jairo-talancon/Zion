@@ -17,6 +17,42 @@ const redPill = document.getElementById("redPill");
 const bluePill = document.getElementById("bluePill");
 const pillHint = document.getElementById("pillHint");
 
+// detect mobile (no hover)
+const isMobile = window.matchMedia("(hover: none)").matches;
+
+let redTapped = false;
+let blueTapped = false;
+
+if (isMobile) {
+  redPill.addEventListener("click", (e) => {
+    if (!redTapped) {
+      e.preventDefault(); // stop normal click
+      pillHint.textContent = "Reality bends.";
+      redTapped = true;
+
+      setTimeout(() => {
+        redTapped = false;
+      }, 2000);
+
+      return;
+    }
+  });
+
+  bluePill.addEventListener("click", (e) => {
+    if (!blueTapped) {
+      e.preventDefault();
+      pillHint.textContent = "Ignorance is bliss.";
+      blueTapped = true;
+
+      setTimeout(() => {
+        blueTapped = false;
+      }, 2000);
+
+      return;
+    }
+  });
+}
+
 const usernameInput = document.getElementById("usernameInput");
 const passwordInput = document.getElementById("passwordInput");
 const registerBtn = document.getElementById("registerBtn");
