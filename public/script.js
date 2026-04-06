@@ -23,35 +23,29 @@ const isMobile = window.matchMedia("(hover: none)").matches;
 let redTapped = false;
 let blueTapped = false;
 
-if (isMobile) {
-  redPill.addEventListener("click", (e) => {
-    if (!redTapped) {
-      e.preventDefault(); // stop normal click
-      pillHint.textContent = "Reality bends.";
-      redTapped = true;
+redPill.addEventListener("click", () => {
+  if (isMobile && !redTapped) {
+    pillHint.textContent = "Reality bends.";
+    redTapped = true;
+    blueTapped = false;
+    return;
+  }
 
-      setTimeout(() => {
-        redTapped = false;
-      }, 2000);
+  pillScreen.classList.add("hidden");
+  authScreen.classList.remove("hidden");
+  usernameInput.focus();
+});
 
-      return;
-    }
-  });
+bluePill.addEventListener("click", () => {
+  if (isMobile && !blueTapped) {
+    pillHint.textContent = "Ignorance is bliss.";
+    blueTapped = true;
+    redTapped = false;
+    return;
+  }
 
-  bluePill.addEventListener("click", (e) => {
-    if (!blueTapped) {
-      e.preventDefault();
-      pillHint.textContent = "Ignorance is bliss.";
-      blueTapped = true;
-
-      setTimeout(() => {
-        blueTapped = false;
-      }, 2000);
-
-      return;
-    }
-  });
-}
+  pillHint.textContent = "You stay in the illusion...";
+});
 
 const usernameInput = document.getElementById("usernameInput");
 const passwordInput = document.getElementById("passwordInput");
@@ -171,16 +165,6 @@ bluePill.addEventListener("mouseenter", () => {
 });
 bluePill.addEventListener("mouseleave", () => {
   pillHint.textContent = "";
-});
-
-redPill.addEventListener("click", () => {
-  pillScreen.classList.add("hidden");
-  authScreen.classList.remove("hidden");
-  usernameInput.focus();
-});
-
-bluePill.addEventListener("click", () => {
-  pillHint.textContent = "You stay in the illusion...";
 });
 
 registerBtn.addEventListener("click", async () => {
